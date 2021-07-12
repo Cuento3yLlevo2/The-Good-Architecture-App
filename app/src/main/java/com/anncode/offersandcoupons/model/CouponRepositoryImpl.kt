@@ -1,32 +1,24 @@
-package com.anncode.offersandcoupons
+package com.anncode.offersandcoupons.model
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.anncode.offersandcoupons.model.ApiAdapter
+import com.anncode.offersandcoupons.R
+import com.anncode.offersandcoupons.presenter.CouponPresenter
+import com.anncode.offersandcoupons.view.RecyclerCouponsAdapter
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity() {
+class CouponRepositoryImpl(var couponPresenter: CouponPresenter): CouponRepository {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        supportActionBar?.hide()
-
-        // View
-        val rvCoupons: RecyclerView = findViewById(R.id.rvCoupons)
-        rvCoupons.layoutManager = LinearLayoutManager(this)
-        val coupons = ArrayList<Coupon>()
+    // API connection logic
+    override fun getCouponsAPI() {
 
         // Controller
+        var coupons: ArrayList<Coupon>? = ArrayList()
         val apiAdapter = ApiAdapter()
         val apiService = apiAdapter.getClientService()
         val call = apiService.getCoupons()
@@ -44,17 +36,16 @@ class MainActivity : AppCompatActivity() {
                 offersJsonArray?.forEach { jsonElement: JsonElement ->
                     var jsonObject = jsonElement.asJsonObject
                     var coupon = Coupon(jsonObject)
-                    coupons.add(coupon)
+                    coupons?.add(coupon)
                 }
-                // RV View
-                rvCoupons.adapter = RecyclerCouponsAdapter(coupons, R.layout.card_coupon)
+
+                couponPresenter.showCoupons(coupons)
+
 
             }
 
 
         })
-
-
-
     }
+
 }

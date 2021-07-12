@@ -1,4 +1,4 @@
-package com.anncode.offersandcoupons
+package com.anncode.offersandcoupons.view
 
 import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.anncode.offersandcoupons.model.Coupon
+import com.anncode.offersandcoupons.R
 import com.squareup.picasso.Picasso
 
-class RecyclerCouponsAdapter(var coupons : ArrayList<Coupon>, var resource: Int) : RecyclerView.Adapter<RecyclerCouponsAdapter.CardCouponHolder>() {
+class RecyclerCouponsAdapter(var coupons : ArrayList<Coupon>?, var resource: Int) : RecyclerView.Adapter<RecyclerCouponsAdapter.CardCouponHolder>() {
 
     override fun onCreateViewHolder(view: ViewGroup, viewType: Int): CardCouponHolder {
         val cardCouponview: View = LayoutInflater.from(view.context).inflate(resource, view, false)
@@ -18,11 +20,11 @@ class RecyclerCouponsAdapter(var coupons : ArrayList<Coupon>, var resource: Int)
     }
 
     override fun getItemCount(): Int {
-        return coupons.size
+        return coupons?.size ?: 0
     }
 
     override fun onBindViewHolder(holder: CardCouponHolder, index: Int) {
-        val coupon = coupons[index]
+        val coupon = coupons?.get(index)
         holder.setDataCard(coupon)
     }
 
@@ -39,7 +41,7 @@ class RecyclerCouponsAdapter(var coupons : ArrayList<Coupon>, var resource: Int)
             v.setOnClickListener(this)
         }
 
-        fun setDataCard(coupon: Coupon){
+        fun setDataCard(coupon: Coupon?){
             this.currentCoupon = coupon
             if (currentCoupon != null){
                 if (currentCoupon?.image_url != "") {
