@@ -2,6 +2,9 @@ package com.anncode.offersandcoupons
 
 /*
 *
+* Model
+*
+* View Controller
 *
 * MainActivity.kt
 val rvCoupons: RecyclerView = findViewById(R.id.rvCoupons)
@@ -32,7 +35,7 @@ call.enqueue(object : Callback<JsonObject> {
 })
 
 
-val apiKey = "69d1837829128f9565368ca704c63207"
+val apiKey = "f6b7d0733b5fd0fa20e3c955045c8a0c"
 val urlApi = "http://feed.linkmydeals.com/"
 
 fun getClientService(): ApiService {

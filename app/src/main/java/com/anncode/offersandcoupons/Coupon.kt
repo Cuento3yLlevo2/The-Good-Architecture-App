@@ -9,29 +9,29 @@ import java.util.*
 
 class Coupon(couponJson: JsonObject?) : Serializable {
 
-    lateinit var id: String
-    lateinit var image_url: String
-    lateinit var title: String
-    lateinit var descriptionShort: String
-    lateinit var category: String
-    lateinit var description:String
-    lateinit var offer: String
-    lateinit var website: String
-    lateinit var endDate: String
-    lateinit var url: String
+    var id: String? = null
+    var image_url: String? = null
+    var title: String? = null
+    var descriptionShort: String? = null
+    var category: String? = null
+    var description:String? = null
+    var offer: String? = null
+    var website: String? = null
+    var endDate: String? = null
+    var url: String? = null
 
     init {
         try {
             id                  = couponJson!!.get(ID).asString
-            image_url           = couponJson!!.get(IMAGE_URL).asString
-            title               = couponJson!!.get(TITLE).asString
-            descriptionShort    = chunkWords(couponJson!!.get(DESCRIPTION_SHORT).asString, ' ', 5)
-            category            = chunkWords(couponJson!!.get(CATEGORY).asString, ',', 1)
-            description         = couponJson!!.get(DESCRIPTION).asString
-            offer               = couponJson!!.get(OFFER).asString
-            website             = couponJson!!.get(WEBSITE).asString
-            endDate             = getFormatDate(couponJson!!.get(END_DATE).asString)
-            url                 = couponJson!!.get(URL).asString
+            image_url           = couponJson.get(IMAGE_URL).asString
+            title               = couponJson.get(TITLE).asString
+            descriptionShort    = chunkWords(couponJson.get(DESCRIPTION_SHORT).asString, ' ', 5)
+            category            = chunkWords(couponJson.get(CATEGORY).asString, ',', 1)
+            description         = couponJson.get(DESCRIPTION).asString
+            offer               = couponJson.get(OFFER).asString
+            website             = couponJson.get(WEBSITE).asString
+            endDate             = getFormatDate(couponJson.get(END_DATE).asString)
+            url                 = couponJson.get(URL).asString
         }catch (e: Exception){
             e.printStackTrace()
         }
@@ -53,8 +53,8 @@ class Coupon(couponJson: JsonObject?) : Serializable {
     }
 
     private fun getFormatDate(dateCoupon:String):String {
-        val format = SimpleDateFormat("yyyy-MM-dd")
-        val dateFormat = SimpleDateFormat("dd MMMM yyyy")
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
         try {
             val parsedDateFormat = format.parse(dateCoupon)
             val cal = Calendar.getInstance()
@@ -72,7 +72,7 @@ class Coupon(couponJson: JsonObject?) : Serializable {
         var newString: String = ""
 
         for (i in 0..quantity){
-            newString += words.get(i) + " "
+            newString += words[i] + " "
         }
 
         return newString
