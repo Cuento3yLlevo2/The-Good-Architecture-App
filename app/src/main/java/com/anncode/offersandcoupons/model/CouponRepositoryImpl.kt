@@ -3,22 +3,24 @@ package com.anncode.offersandcoupons.model
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.anncode.offersandcoupons.R
-import com.anncode.offersandcoupons.presenter.CouponPresenter
-import com.anncode.offersandcoupons.view.RecyclerCouponsAdapter
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CouponRepositoryImpl(var couponPresenter: CouponPresenter): CouponRepository {
+class CouponRepositoryImpl: CouponRepository {
+
+    private var coupons = MutableLiveData<List<Coupon>>()
+    // Subject MutableListData
+    // Observes List Coupons
 
     // API connection logic
-    override fun getCouponsAPI() {
+    override fun callCouponsAPI() {
 
         // Controller
-        var coupons: ArrayList<Coupon>? = ArrayList()
+        var couponList: ArrayList<Coupon>? = ArrayList()
         val apiAdapter = ApiAdapter()
         val apiService = apiAdapter.getClientService()
         val call = apiService.getCoupons()
@@ -36,16 +38,22 @@ class CouponRepositoryImpl(var couponPresenter: CouponPresenter): CouponReposito
                 offersJsonArray?.forEach { jsonElement: JsonElement ->
                     var jsonObject = jsonElement.asJsonObject
                     var coupon = Coupon(jsonObject)
-                    coupons?.add(coupon)
+                    couponList?.add(coupon)
                 }
 
-                couponPresenter.showCoupons(coupons)
+                coupons.value = couponList
+
+
 
 
             }
 
 
         })
+    }
+
+    override fun getCoupons(): MutableLiveData<List<Coupon>> {
+        return coupons
     }
 
 }
